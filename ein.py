@@ -108,26 +108,7 @@ def main():
     FORM_URL_ORIGIN = 'https://www.flcompanyregistry.com/Incorporation-Date/2019-01-01/'
 
     PROXIES = [
-        "m_2a498748b3-country-us-sid-3j6cch2j-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-3438h639-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-0i71ak81-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-gefk0akh-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-953efjfk-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-j7cc3dgk-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-bd0b44k5-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-k6kd8ebi-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-7k8j6hke-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-fdbg1164-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-4g9ccgjd-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-02ag5adj-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-i03k2d32-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-e988ecj1-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-jjcc4ic7-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-292192i3-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-ek8eccif-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-94a83k8k-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-20ihh987-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
-        "m_2a498748b3-country-us-sid-8h6j6jhc-ttl-20m:7aa82d0b15@v2.proxyempire.io:5000",
+        # list of proxies
     ]
 
     PROXY = random.choice(PROXIES)
