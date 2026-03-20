@@ -16,7 +16,7 @@ import random
 
 def scrape(PROXY, FORM_URL_ORIGIN):
 
-    AIRTABLE_API = 'pat5CgRLCXHna9XPq.9ea1c27ae2822b58ab92bb30dfcc34f19b12c5d35475e762bbac1cc2c94aadb4'
+    AIRTABLE_API = 'YOUR_API_KEY'
     AIRTABLE_BASE_ID = "appRupVoBVAzn0bMw"
     AIRTABLE_TABLE_NAME = 'Entities'
 
