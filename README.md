@@ -1,20 +1,101 @@
 # EinScraper
 
-For the specific use case, we will need to bypass Cloudflare, cause we’re scraping a government website. Our normal selenium won’t work, cause it’s easily detected. We’ll use a Selenium-based tool, which is an improved version. We don’t want to be bloked so that’s why we’ll use proxy rotation on a random choice. First, we’ll import the libraries (in our case, 3 - BS4, SB, and random). Then we’ll need our URL as a constant. The good thing about this website is that it is structured very well in the URL part. We can filter companies by year, month, and date. So we don’t need to navigate multiple pages; we can just go to the page with companies and scrape that one. Then we have our list with proxies, the proxies are structured this way: username:password@host:port. Then we want to rotate them on each run, so we create a random function that gets a proxy at random from our list. The idea is to scrape active companies and append them to a list, then import that list as a function in my second script so I can access every company by index. First, we need to initialise our setup so we can open the browser. We’ll use the formula, where it’s important to pass the uc=True (Undetected-Chromedriver = True). This is a specialized browser automation setting designed to bypass anti-bot detection systems like Cloudflare, Imperva, and DataDome.  Then pass our Proxy as well.
+A web scraper for a government company registry website. The main challenge here was bypassing Cloudflare, since it's a government website with anti-bot protection — normal Selenium gets detected easily. We use SeleniumBase which is an improved version of Selenium built to handle exactly this.
 
+We also don't want to get blocked, so we use proxy rotation with a random choice on each run.
+
+---
+
+## Libraries used
+
+- `seleniumbase` — Cloudflare bypass + browser automation
+- `beautifulsoup4` — HTML parsing
+- `random` — proxy rotation + human-like wait times
+
+---
+
+## How the website is structured
+
+The good thing about this website is that it's structured very well in the URL part. We can filter companies by year, month, and date directly from the URL — so we don't need to navigate multiple pages manually, we can just go straight to the page we want and scrape it.
+
+---
+
+## Proxy rotation
+
+We have a list of proxies structured like this:
+```
+username:password@host:port
+```
+
+On each run we pick one at random using a simple function — so the website doesn't see the same IP every time.
+
+---
+
+## How it works — step by step
+
+**1. Browser setup**
+
+```python
 with SB(uc=True, proxy=PROXY) as sb:
+```
 
-with → When we're done, close everything automatically; otherwise, we need to close it manually with sb.quit()
-SB → open a Chrome browser instance using SeleniumBase
-uc=True → make Chrome look like a real human browser so Cloudflare doesn't block us
-proxy=PROXY → use this IP address instead of your real one so the website doesn't know it's you
-as sb → give this browser the nickname sb so we can control it later in the code
-Then we need to open our URL with the command activate_cdp_mode(). Then we wait till the container we want becomes visible on the page, otherwise we need to guesswork with sb.sleep() when it will render. Then the main logic is to create a while loop, cause we’ll be checking every page with company lists, and after there are no pages left, we jsut except with a print. First, we need to parse our HTML. So we need to extract it first with get_page_source(). Then we need to parse it with BeautifulSoup.
-Then we need to find all the containers where the info we want is using the structured now HTML and find_all(). We search for an <a> tag and a class inside.
-Then we loop through every listing and search for the company status. The company status is nested inside a <div> class, and the status we want is inside an element with a <span> tag, so we take the element and add .text to extract only the text.
-Then we check if the company status is “Active”. If it’s active, we need to split any unnecessary characters. Then we recieve numer of string element and we need to combine them with a ‘ ’.join(). So it can be one element in our list, instead of a few separate ones. Then the only thing that was kinda a rookie mistake from me was that I was trying to open the button on the bottom of the page as a URL instead of clicking it. Then Claude told me to use the arrow and get the href link from the <a> tag. Find the "Next" button on the page and grab its link, save it as next_url
-Example: next_url = "/Incorporation-Date/2019-01-01/2"
-Wait a random amount of time between 2 and 5 seconds before doing anything else
-random.uniform(2, 5) picks a random decimal number like 3.27 or 4.81 — looks more human than always waiting exactly 2 seconds!
-That’s it, not that complex, but there are a few smart things we done. The main issue was to find that seleniumbase library and to learn how it operates
+- `with` → when we're done, close everything automatically — otherwise we'd have to call `sb.quit()` manually
+- `SB` → open a Chrome browser instance using SeleniumBase
+- `uc=True` → Undetected-Chromedriver mode, makes Chrome look like a real human browser so Cloudflare doesn't block us
+- `proxy=PROXY` → use a proxy IP instead of our real one so the website doesn't know it's us
+- `as sb` → give this browser the nickname `sb` so we can control it in the code
 
+**2. Open the page**
+
+We open the URL using `activate_cdp_mode()`. Then we wait until the container we want becomes visible on the page — instead of guessing with `sb.sleep()` when it will render.
+
+**3. Main scraping loop**
+
+We use a `while` loop because we're checking every page of company listings. When there are no more pages, we just `except` with a print and stop.
+
+On each page:
+- Extract the HTML with `get_page_source()`
+- Parse it with BeautifulSoup
+- Find all listing containers using `find_all()` — searching for an `<a>` tag with a specific class
+
+**4. Filter active companies**
+
+For each listing we look for the company status. It's nested inside a `<div>` class, and the actual status text is inside a `<span>` tag — so we grab that element and use `.text` to extract only the text.
+
+We check if the status is `"Active"`. If it is, we split out any unnecessary characters and combine the parts with `' '.join()` so each company becomes one clean element in our list instead of a few separate ones.
+
+**5. Pagination**
+
+A rookie mistake I made early on was trying to open the next page button as a URL instead of clicking it. The fix was to grab the `href` from the `<a>` tag on the "Next" button instead:
+
+```python
+next_url = "/Incorporation-Date/2019-01-01/2"
+```
+
+**6. Human-like delays**
+
+Between each page we wait a random amount of time:
+
+```python
+random.uniform(2, 5)
+```
+
+This picks a random decimal like `3.27` or `4.81` — looks much more human than always waiting exactly 2 seconds.
+
+---
+
+## Output
+
+Active companies are appended to a list, which is then imported as a function in a second script — so we can access every company by index.
+
+---
+
+## Smart things done here
+
+- Using SeleniumBase with `uc=True` to bypass Cloudflare without getting blocked
+- Proxy rotation on every run so the website doesn't track our IP
+- Waiting for elements to appear instead of guessing load times with `sleep()`
+- Random delays between pages to mimic human behaviour
+- Grabbing the "Next" button `href` instead of trying to construct the URL manually
+
+The main challenge was finding the SeleniumBase library and learning how it operates — once that clicked, the rest wasn't that complex.
